@@ -12,3 +12,51 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Post {
+  id         String     @id @default(uuid())
+  title      String     @db.VarChar(255)
+  content    String     @db.Text
+  thumbnail  String?    @db.VarChar(255)
+  IsFeatured Boolean    @default(false)
+  status     PostStatus @default(PUBLISHED)
+  tags       String[]
+  views      Int        @default(0)
+  authorId   String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  comments   Comment[]
+
+  @@index([authorId])
+  @@map("posts")
+}
+
+model Comment {
+  id        String        @id @default(uuid())
+  content   String        @db.Text
+  authorId  String //better auth
+  postId    String
+  post      Post          @relation(fields: [postId], references: [id])
+  parentId  String? // For nested comments (replies)
+  parent    Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]     @relation("CommentReplies")
+  status    CommentStatus @default(APPROVED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([postId])
+  @@index([authorId])
+  @@map("comments")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
