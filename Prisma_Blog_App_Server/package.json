@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "dev": "tsx watch src/server.ts",
+  "start": "node dist/server.js",
+  "build": "tsc",
+  "prisma:push": "prisma db push",
+  "prisma:studio": "prisma studio"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,6 +25,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "better-auth": "^1.4.10",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
