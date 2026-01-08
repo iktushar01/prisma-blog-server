@@ -206,6 +206,7 @@ export const auth = betterAuth({
   
   emailVerification: {
     sentOnSignUp: true,
+    autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
       const appName = process.env.APP_NAME || "Prisma Blog";
       const verificationUrl = `${process.env.BETTER_AUTH_URL || process.env.NEXTAUTH_URL}/verify-email?token=${token}`;
@@ -273,6 +274,8 @@ export const auth = betterAuth({
   },
   socialProviders: {
         google: { 
+            prompt: "select_account consent",
+            accessType: "offline",
             clientId: process.env.GOOGLE_CLIENT_ID as string, 
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
         }, 
