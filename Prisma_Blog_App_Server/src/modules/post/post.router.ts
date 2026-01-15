@@ -1,8 +1,17 @@
-import express, { Router } from 'express';
-import { postController } from './post.controller';
+import express, { Router, Request, Response, NextFunction } from "express";
+import { postController } from "./post.controller";
 
-const router = express.Router();
+const router: Router = express.Router();
 
-router.post('/', postController.createPostHandler);
+// auth middleware
+const auth = () => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    console.log("middleware");
+    next();
+  };
+};
 
-export const postRouter :Router= router;
+// use auth middleware on this route
+router.post("/", auth(), postController.createPostHandler);
+
+export const postRouter: Router = router;
