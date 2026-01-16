@@ -19,10 +19,10 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
         const searchString = req.query.search as string | undefined;
         const tag = req.query.tag ? (req.query.tag as string).split(',') : [];
         const IsFeatured = req.query.IsFeatured as string | undefined;
-        const filters: { search?: string; tag?: string[]; IsFeatured?: string } = {};
+        const filters: { search?: string; tag?: string[]; IsFeatured?: boolean } = {};
         if (searchString) filters.search = searchString;
         if (tag.length > 0) filters.tag = tag;
-        if (IsFeatured) filters.IsFeatured = IsFeatured;
+        if (IsFeatured !== undefined) filters.IsFeatured = IsFeatured === 'true';
         const result = await postService.getAllPosts(filters);
         res.status(200).json(result);
     } catch (error) {
