@@ -1,4 +1,4 @@
-import { Post } from "../../../generated/prisma/client";
+import { Post, PostStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const createPost = async (
@@ -17,6 +17,8 @@ const getAllPosts = async (payload: {
   search?: string;
   tag?: string[];
   IsFeatured?: boolean;
+  status?: PostStatus;
+  authorId?: string;
 }) => {
   const andConditions: any[] = [];
 
@@ -56,6 +58,18 @@ const getAllPosts = async (payload: {
  if (payload.IsFeatured !== undefined) {
     andConditions.push({
       IsFeatured: payload.IsFeatured,
+    });
+  }
+  
+  if (payload.status) {
+    andConditions.push({
+      status: payload.status,
+    });
+  }
+
+  if (payload.authorId) {
+    andConditions.push({
+      authorId: payload.authorId,
     });
   }
 
