@@ -17,6 +17,7 @@ const createPostHandler = async (req : Request, res : Response) => {
 const getAllPostsHandler = async (req: Request, res: Response) => {
     try {
         const searchString = req.query.search as string | undefined;
+        const tag = req.query.tag ? (req.query.tag as string).split(',') : [];
         const result = await postService.getAllPosts(
             searchString ? { search: searchString } : {}
         );
