@@ -5,52 +5,54 @@ const createPost = async (
   data: Omit<Post, "id" | "createdAt" | "updatedAt">,
   userID: string
 ) => {
-  const result = await prisma.post.create({
+  return prisma.post.create({
     data: {
       ...data,
       authorId: userID,
     },
   });
-  return result;
 };
 
 const getAllPosts = async (payload: {
   search?: string;
   tag?: string[];
 }) => {
+  const andConditions: any[] = [];
+
+  if (payload.search) {
+    andConditions.push({
+      OR: [
+        {
+          title: {
+            contains: payload.search,
+            mode: "insensitive",
+          },
+        },
+        {
+          content: {
+            contains: payload.search,
+            mode: "insensitive",
+          },
+        },
+        {
+          tags: {
+            has: payload.search,
+          },
+        },
+      ],
+    });
+  }
+
+  if (payload.tag && payload.tag.length > 0) {
+    andConditions.push({
+      tags: {
+        hasEvery: payload.tag,
+      },
+    });
+  }
+
   const allPost = await prisma.post.findMany({
-    where: payload.search
-      ? {
-          AND: [
-            {
-              OR: [
-                {
-                  title: {
-                    contains: payload.search,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  content: {
-                    contains: payload.search,
-                    mode: "insensitive",
-                  },
-                },
-                {
-                  tags: {
-                    has: payload.search,
-                  },
-                },
-              ],
-            },
-            {
-              tags: {
-                hasEvery: payload.tag as string[],
-              },
-            },
-          ],
-        }
-      : {},
+    where: andConditions.length > 0 ? { AND: andConditions } : {},
   });
 
   return allPost;
