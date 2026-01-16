@@ -16,8 +16,10 @@ const createPostHandler = async (req : Request, res : Response) => {
 
 const getAllPostsHandler = async (req: Request, res: Response) => {
     try {
-        const posts = await postService.getAllPosts();
-        res.status(200).json(posts);
+        const searchString = req.query.search as string | undefined;
+        const { search } = req.query;
+        const result = await postService.getAllPosts({search : searchString});
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
