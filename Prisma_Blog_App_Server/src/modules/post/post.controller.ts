@@ -14,6 +14,16 @@ const createPostHandler = async (req : Request, res : Response) => {
     }
 }
 
+const getAllPostsHandler = async (req: Request, res: Response) => {
+    try {
+        const posts = await postService.getAllPosts();
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 export const postController = {
-    createPostHandler
+    createPostHandler,
+    getAllPostsHandler
 }; 
