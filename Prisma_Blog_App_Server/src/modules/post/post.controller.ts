@@ -22,8 +22,9 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
         const IsFeatured = req.query.IsFeatured as string | undefined;
         const status = req.query.status as PostStatus | undefined;
         const authorId = req.query.authorId as string | undefined;
-        const page = Number(req.query.page && 1);
-        const limit = Number(req.query.limit && 10);
+        const page = Number(req.query.page ?? 1);
+        const limit = Number(req.query.limit ?? 10);
+        const skip = (page - 1) * limit;
 
 
         const filters: { search?: string; tag?: string[]; IsFeatured?: boolean; status?: PostStatus } = {};
@@ -38,6 +39,9 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
         if (page && limit) {
             (filters as any).page = page;
             (filters as any).limit = limit;
+        }
+        if (skip) {
+            (filters as any).skip = skip;
         }
         
         

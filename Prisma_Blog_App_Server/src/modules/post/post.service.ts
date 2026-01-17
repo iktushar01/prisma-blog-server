@@ -21,6 +21,7 @@ const getAllPosts = async (payload: {
   authorId?: string;
   page?: number;
   limit?: number;
+  skip?: number;
 }) => {
   const andConditions: any[] = [];
 
@@ -75,8 +76,18 @@ const getAllPosts = async (payload: {
     });
   }
 
+  // Calculate pagination
+  const limit = payload.limit || 10;
+  const page = payload.page || 1;
+  const skip = payload.skip !== undefined ? payload.skip : (page - 1) * limit;
+
   const allPost = await prisma.post.findMany({
     where: andConditions.length > 0 ? { AND: andConditions } : {},
+    take: limit,
+    skip: skip,
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return allPost;
