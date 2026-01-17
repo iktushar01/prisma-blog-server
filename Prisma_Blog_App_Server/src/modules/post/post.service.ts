@@ -22,6 +22,9 @@ const getAllPosts = async (payload: {
   page?: number;
   limit?: number;
   skip?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+
 }) => {
   const andConditions: any[] = [];
 
@@ -85,9 +88,7 @@ const getAllPosts = async (payload: {
     where: andConditions.length > 0 ? { AND: andConditions } : {},
     take: limit,
     skip: skip,
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: payload.sortBy ? { [payload.sortBy]: payload.sortOrder || 'desc' } : { createdAt: 'desc' }
   });
 
   return allPost;
