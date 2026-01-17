@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "seed:admin": "tsx src/scripts/seedAdmin.ts",
     "start": "node dist/server.js",
     "build": "tsc",
     "prisma:push": "prisma db push",
