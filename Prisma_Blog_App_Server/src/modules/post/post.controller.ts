@@ -23,12 +23,7 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
         const IsFeatured = req.query.IsFeatured as string | undefined;
         const status = req.query.status as PostStatus | undefined;
         const authorId = req.query.authorId as string | undefined;
-        const page = Number(req.query.page ?? 1);
-        const limit = Number(req.query.limit ?? 10);
-        const skip = (page - 1) * limit;
-        const sortBy = req.query.sortBy as string | undefined;
-        const sortOrder = req.query.sortOrder as 'asc' | 'desc' | undefined;
-        const option = paginationSortingHelper(req.query)
+        const {page,limit,skip,sortBy,sortOrder} = paginationSortingHelper(req.query)
 
         const filters: { search?: string; tag?: string[]; IsFeatured?: boolean; status?: PostStatus } = {};
         if (searchString) filters.search = searchString;
@@ -52,7 +47,6 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
         if (sortOrder) {
             (filters as any).sortOrder = sortOrder;
         }
-        
         
 
 
