@@ -22,6 +22,10 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
         const IsFeatured = req.query.IsFeatured as string | undefined;
         const status = req.query.status as PostStatus | undefined;
         const authorId = req.query.authorId as string | undefined;
+        const page = Number(req.query.page && 1);
+        const limit = Number(req.query.limit && 10);
+
+
         const filters: { search?: string; tag?: string[]; IsFeatured?: boolean; status?: PostStatus } = {};
         if (searchString) filters.search = searchString;
         if (tag.length > 0) filters.tag = tag;
@@ -31,7 +35,11 @@ const getAllPostsHandler = async (req: Request, res: Response) => {
             // Assuming you want to filter by authorId as well
             (filters as any).authorId = authorId;
         }
-
+        if (page && limit) {
+            (filters as any).page = page;
+            (filters as any).limit = limit;
+        }
+        
         
 
 

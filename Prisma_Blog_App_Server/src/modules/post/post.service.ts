@@ -19,6 +19,8 @@ const getAllPosts = async (payload: {
   IsFeatured?: boolean;
   status?: PostStatus;
   authorId?: string;
+  page?: number;
+  limit?: number;
 }) => {
   const andConditions: any[] = [];
 
